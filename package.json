@@ -1,0 +1,15 @@
+{
+  "name": "roi-calculator",
+  "version": "1.0.0",
+  "description": "ERP–CRM ROI calculator: annual cost of manual work, recoverable range and integration risk score. Runs in the browser.",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "python3 -m http.server 8080"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

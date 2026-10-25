@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Everything runs in the browser: no network requests, no inline scripts -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+    <title>ERP–CRM ROI Calculator</title>
+    <meta name="description" content="Estimate the annual cost of manual ERP–CRM work, the range you could recover and an integration risk score.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="page">
+        <header class="hero">
+            <span class="eyebrow">ERP–CRM ROI Calculator</span>
+            <h1>Find the hidden cost between your ERP and CRM.</h1>
+            <p>Answer four questions about one repetitive process, such as order entry, customer creation or invoice reconciliation. You get the annual cost, the range you could recover and an integration risk score. Nothing leaves this browser.</p>
+        </header>
+
+        <form id="diagnosticForm" class="card" novalidate>
+            <div class="grid">
+                <label>1. Transactions per month
+                    <input name="monthlyTransactions" type="number" min="1" max="1000000" step="1" value="500" required>
+                    <small>Orders, customers or invoices.</small>
+                </label>
+                <label>2. Manual minutes each
+                    <input name="minutesPerTransaction" type="number" min="0.1" max="1440" step="0.1" value="12" required>
+                    <small>Finding, copying, checking and uploading.</small>
+                </label>
+                <label>3. Hourly cost (CHF)
+                    <input name="hourlyRate" type="number" min="1" max="1000" step="1" value="65" required>
+                    <small>Salary plus employer costs.</small>
+                </label>
+                <label>4. How often errors happen
+                    <select name="errorRatePercent" required>
+                        <option value="0.5">Rarely, about 0.5%</option>
+                        <option value="2" selected>Sometimes, about 2%</option>
+                        <option value="5">Often, about 5%</option>
+                    </select>
+                </label>
+            </div>
+
+            <details>
+                <summary>Advanced assumptions</summary>
+                <div class="grid">
+                    <label>Cost per error (CHF)
+                        <input name="costPerError" type="number" min="0" max="1000000" step="1" value="180" required>
+                    </label>
+                    <label>Connected systems
+                        <input name="systemsCount" type="number" min="2" max="50" step="1" value="3" required>
+                    </label>
+                    <label>Manual handoffs
+                        <input name="manualHandoffs" type="number" min="0" max="20" step="1" value="2" required>
+                    </label>
+                    <label>Data sync
+                        <select name="syncFrequency" required>
+                            <option value="realtime">Real time</option>
+                            <option value="hourly">Hourly</option>
+                            <option value="daily" selected>Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="manual">Manual / ad hoc</option>
+                        </select>
+                    </label>
+                    <label>Monitoring
+                        <select name="monitoring" required>
+                            <option value="automated">Automated alerts and retries</option>
+                            <option value="partial" selected>Some alerts or logs</option>
+                            <option value="manual">Manual checks</option>
+                            <option value="none">No monitoring</option>
+                        </select>
+                    </label>
+                </div>
+            </details>
+
+            <button type="submit">Get the estimate</button>
+            <p id="formError" class="error" role="alert" hidden></p>
+        </form>
+
+        <section id="results" class="card results" aria-live="polite" tabindex="-1" hidden>
+            <span class="eyebrow">Result</span>
+            <div class="headline">
+                <div><span>Estimated annual operational waste</span><strong id="annualWaste"></strong></div>
+                <div><span>Integration risk</span><strong id="riskScore"></strong> <em id="riskLevel"></em></div>
+            </div>
+            <dl class="figures">
+                <div><dt>Manual hours / year</dt><dd id="manualHours"></dd></div>
+                <div><dt>Annual labor cost</dt><dd id="laborCost"></dd></div>
+                <div><dt>Annual error cost</dt><dd id="errorCost"></dd></div>
+                <div><dt>Potential recoverable range</dt><dd id="recoverableRange"></dd></div>
+            </dl>
+            <p class="note">Recoverable range = 30% to 60% of the annual waste. The model is in <code>src/calculator-core.mjs</code>.</p>
+        </section>
+
+        <footer class="foot">Open source by <a href="https://www.prietoteran.com/" rel="noopener noreferrer">Teran Studio</a> · Apache 2.0</footer>
+    </main>
+    <script type="module" src="src/app.mjs"></script>
+</body>
+</html>
